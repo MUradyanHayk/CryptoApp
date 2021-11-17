@@ -22,6 +22,7 @@ class CoinAdapter(val context: Context, var coins: MutableList<Coin>? = null) : 
     override fun onBindViewHolder(holder: CoinViewHolder, position: Int) {
         coins?.get(position)?.let {
             holder.configureItem(it)
+            holder.itemView.setOnClickListener {  }
         }
     }
 
@@ -37,6 +38,7 @@ class CoinViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
     var iconImageView: ImageView? = null
 
     init {
+        itemView.setBackgroundResource(R.drawable.item_click_background)
         nameTextView = itemView.findViewById(R.id.name_text_view)
         priceTextView = itemView.findViewById(R.id.price_text_view)
         favoriteImageView = itemView.findViewById(R.id.favorite_image_view)
@@ -44,7 +46,7 @@ class CoinViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
     }
 
     fun configureItem(coin: Coin) {
-        nameTextView?.text = coin.name
+        nameTextView?.text = "${coin.name} (${coin.symbol})"
         priceTextView?.text = coin.price
         Glide.with(itemView.context).load(coin.icon).into(iconImageView!!)
     }

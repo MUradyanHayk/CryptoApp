@@ -3,6 +3,11 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Trainings/CryptoApp/app/src/main/res/drawable/clicked_bg.xml" value="0.21354166666666666" />
+        <entry key="..\:/Trainings/CryptoApp/app/src/main/res/drawable/ic_star_border.xml" value="0.21354166666666666" />
+        <entry key="..\:/Trainings/CryptoApp/app/src/main/res/drawable/ic_star_fill.xml" value="0.21354166666666666" />
+        <entry key="..\:/Trainings/CryptoApp/app/src/main/res/drawable/item_click_background.xml" value="0.21354166666666666" />
+        <entry key="..\:/Trainings/CryptoApp/app/src/main/res/drawable/not_clicked_bg.xml" value="0.21354166666666666" />
         <entry key="..\:/Trainings/CryptoApp/app/src/main/res/layout/activity_main.xml" value="0.2957427536231884" />
         <entry key="..\:/Trainings/CryptoApp/app/src/main/res/layout/fragment_all_coin.xml" value="0.19739583333333333" />
         <entry key="..\:/Trainings/CryptoApp/app/src/main/res/layout/item_coin.xml" value="0.25" />

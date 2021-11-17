@@ -11,7 +11,8 @@
         android:id="@+id/icon_image_view"
         android:layout_width="46dp"
         android:layout_height="46dp"
-        android:layout_gravity="center" />
+        android:layout_gravity="center"
+        tools:src="@drawable/ic_launcher_foreground" />
 
     <LinearLayout
         android:layout_width="0dp"
@@ -27,14 +28,16 @@
             android:layout_height="wrap_content"
             android:textColor="@color/black"
             android:textSize="18sp"
-            android:textStyle="bold" />
+            android:textStyle="bold"
+            tools:text="@string/app_name" />
 
         <TextView
             android:id="@+id/price_text_view"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textColor="@color/black"
-            android:textSize="16sp" />
+            android:textSize="16sp"
+            tools:text="@string/app_name" />
     </LinearLayout>
 
     <ImageView
@@ -42,5 +45,6 @@
         android:layout_width="30dp"
         android:layout_height="30dp"
         android:layout_gravity="center"
-        android:layout_marginEnd="16dp" />
+        android:layout_marginEnd="16dp"
+        android:src="@drawable/ic_star_border" />
 </LinearLayout>
