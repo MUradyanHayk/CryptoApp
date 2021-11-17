@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ProgressBar
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -19,6 +20,7 @@ class AllCoinFragment : Fragment() {
     var screen: View? = null
     var coinAdapter: CoinAdapter? = null
     var recyclerView: RecyclerView? = null
+    var progressBar: ProgressBar? = null
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         super.onCreateView(inflater, container, savedInstanceState)
         screen = inflater.inflate(R.layout.fragment_all_coin, container, false)
@@ -33,6 +35,8 @@ class AllCoinFragment : Fragment() {
         coinAdapter = CoinAdapter(requireContext())
         recyclerView?.adapter = coinAdapter
         recyclerView?.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
+
+        progressBar = screen?.findViewById(R.id.progress_bar)
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -45,14 +49,15 @@ class AllCoinFragment : Fragment() {
         viewModel?.download?.observe(viewLifecycleOwner) { coinResponse ->
             when (coinResponse) {
                 is Download.Success -> {
+                    progressBar?.visibility = View.GONE
                     coinAdapter?.coins = coinResponse.data?.coins
                     coinAdapter?.notifyDataSetChanged()
                 }
                 is Download.Error -> {
-
+                    progressBar?.visibility = View.GONE
                 }
                 is Download.Loading -> {
-
+                    progressBar?.visibility = View.VISIBLE
                 }
             }
         }
