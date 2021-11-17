@@ -6,5 +6,5 @@ import retrofit2.http.GET
 
 interface CoinApi {
     @GET("coins?skip=0&limit=5&currency=EUR")
-    fun getCoins(): Response<Coin>
+    suspend fun getCoins(): Response<Coin>
 }

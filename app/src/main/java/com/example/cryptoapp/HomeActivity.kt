@@ -5,6 +5,7 @@ import android.os.Bundle
 import androidx.lifecycle.ViewModelProvider
 import androidx.viewpager2.widget.ViewPager2
 import com.example.cryptoapp.adapter.CoinFragmentStateAdapter
+import com.example.cryptoapp.repository.CoinRepository
 import com.example.cryptoapp.viewModel.CoinViewModel
 import com.google.android.material.tabs.TabLayout
 
@@ -20,8 +21,8 @@ class HomeActivity : AppCompatActivity() {
 
         initView()
 
-        coinViewModel = ViewModelProvider(this).get(CoinViewModel::class.java)
-//        coinViewModel?.initializeViewModel()
+        coinViewModel = ViewModelProvider(this)[CoinViewModel::class.java]
+        coinViewModel?.initializeViewModel(CoinRepository())
     }
 
     private fun initView() {
