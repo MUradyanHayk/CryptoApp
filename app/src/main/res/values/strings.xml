@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">CryptoApp</string>
+    <string name="all_title_text">All</string>
+    <string name="favorite_title_text">Favorite</string>
+</resources>
