@@ -2,20 +2,26 @@ package com.example.cryptoapp
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.lifecycle.ViewModelProvider
 import androidx.viewpager2.widget.ViewPager2
 import com.example.cryptoapp.adapter.CoinFragmentStateAdapter
+import com.example.cryptoapp.viewModel.CoinViewModel
 import com.google.android.material.tabs.TabLayout
 
 class HomeActivity : AppCompatActivity() {
     private var tabLayout: TabLayout? = null
     private var viewPager: ViewPager2? = null
     private var coinFragmentStateAdapter: CoinFragmentStateAdapter? = null
+    var coinViewModel: CoinViewModel? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
         initView()
+
+        coinViewModel = ViewModelProvider(this).get(CoinViewModel::class.java)
+//        coinViewModel?.initializeViewModel()
     }
 
     private fun initView() {

@@ -48,7 +48,9 @@ dependencies {
     implementation "com.squareup.retrofit2:converter-gson:$retrofit_version"
 
     //Coroutine
-    def lifecycle_version = "2.9.0"
-    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.5.2'
-    implementation "androidx.lifecycle.lifecycle-viewmodel:$lifecycle_version"
+    def lifecycle_version = "2.4.0"
+    def coroutine_version = "1.5.2"
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutine_version"
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutine_version"
+    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycle_version"
 }
