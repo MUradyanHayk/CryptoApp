@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ProgressBar
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -26,7 +27,7 @@ class AllCoinFragment : Fragment() {
         screen = inflater.inflate(R.layout.fragment_all_coin, container, false)
         initView()
         viewModel = (activity as? HomeActivity?)?.coinViewModel
-        viewModel?.getAllCoins()
+        viewModel?.getAllCoins(requireContext())
         return screen
     }
 
@@ -36,7 +37,29 @@ class AllCoinFragment : Fragment() {
         recyclerView?.adapter = coinAdapter
         recyclerView?.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
 
+        recyclerView?.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                super.onScrolled(recyclerView, dx, dy)
+                if (isLastItemDisplayed(recyclerView)) {
+                    viewModel?.getAllCoins(requireContext())
+                }
+            }
+        })
         progressBar = screen?.findViewById(R.id.progress_bar)
+    }
+
+    private fun isLastItemDisplayed(recyclerView: RecyclerView): Boolean {
+        val adapter = recyclerView.adapter ?: return false
+        if (adapter.itemCount == 0) {
+            return false
+        }
+
+        val lastVisibleItemPosition = (recyclerView.layoutManager as? LinearLayoutManager?)?.findLastCompletelyVisibleItemPosition()
+        if (lastVisibleItemPosition != RecyclerView.NO_POSITION && lastVisibleItemPosition == adapter.itemCount - 1) {
+            return true
+        }
+
+        return false
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -50,11 +73,16 @@ class AllCoinFragment : Fragment() {
             when (coinResponse) {
                 is Download.Success -> {
                     progressBar?.visibility = View.GONE
-                    coinAdapter?.coins = coinResponse.data?.coins
+                    if (coinResponse.data?.coins?.isNullOrEmpty() == false) {
+                        coinAdapter?.coins?.addAll(coinResponse.data.coins)
+                    }
                     coinAdapter?.notifyDataSetChanged()
                 }
                 is Download.Error -> {
                     progressBar?.visibility = View.GONE
+                    if (!coinResponse.message.isNullOrEmpty()) {
+                        Toast.makeText(requireContext(), coinResponse.message, Toast.LENGTH_SHORT).show()
+                    }
                 }
                 is Download.Loading -> {
                     progressBar?.visibility = View.VISIBLE

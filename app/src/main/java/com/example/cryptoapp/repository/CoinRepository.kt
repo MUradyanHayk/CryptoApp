@@ -8,8 +8,8 @@ import com.example.cryptoapp.network.RetrofitInstance
 import retrofit2.Response
 
 class CoinRepository(val db: CoinDatabase) {
-    suspend fun getAllCoins(): Response<CoinsResponse> {
-        return RetrofitInstance.api.getCoins()
+    suspend fun getAllCoins(skip: Int, limit: Int): Response<CoinsResponse> {
+        return RetrofitInstance.api.getCoins(skip, limit)
     }
 
     fun getSavedCoins(): LiveData<Coin> {

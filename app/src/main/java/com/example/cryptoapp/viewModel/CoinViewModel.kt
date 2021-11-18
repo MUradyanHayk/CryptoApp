@@ -1,9 +1,11 @@
 package com.example.cryptoapp.viewModel
 
+import android.content.Context
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.cryptoapp.data.CoinsResponse
+import com.example.cryptoapp.network.NetworkManager
 import com.example.cryptoapp.repository.CoinRepository
 import com.example.cryptoapp.utils.Download
 import kotlinx.coroutines.Dispatchers
@@ -13,13 +15,20 @@ import retrofit2.Response
 
 class CoinViewModel : ViewModel() {
     private var repository: CoinRepository? = null
+    private var skip: Int = 0
+    private var limit: Int = 10
+
     var download: MutableLiveData<Download<CoinsResponse>> = MutableLiveData()
 
     fun initializeViewModel(repository: CoinRepository?) {
         this.repository = repository
     }
 
-    fun getAllCoins(): Job {
+    fun getAllCoins(context: Context): Job? {
+        if (!NetworkManager.isNetworkAvailable(context)) {
+            download.postValue(Download.Error("There is no Internet Connection"))
+            return null
+        }
         return viewModelScope.launch(Dispatchers.IO) {
             safeCoinCall()
         }
@@ -27,7 +36,7 @@ class CoinViewModel : ViewModel() {
 
     private suspend fun safeCoinCall() {
         this.download.postValue(Download.Loading())
-        val response = repository?.getAllCoins()
+        val response = repository?.getAllCoins(skip, limit)
         if (response != null) {
             this.download.postValue(handleResponse(response))
         } else {
@@ -38,6 +47,7 @@ class CoinViewModel : ViewModel() {
     private fun handleResponse(response: Response<CoinsResponse>): Download<CoinsResponse> {
         if (response.isSuccessful) {
             response.body()?.let {
+                skip += limit
                 return Download.Success(it)
             }
         }

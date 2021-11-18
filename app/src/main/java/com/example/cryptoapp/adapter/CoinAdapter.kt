@@ -13,21 +13,19 @@ import com.bumptech.glide.Glide
 import com.example.cryptoapp.R
 import com.example.cryptoapp.data.Coin
 
-class CoinAdapter(val context: Context, var coins: MutableList<Coin>? = null) : RecyclerView.Adapter<CoinViewHolder>() {
+class CoinAdapter(val context: Context, var coins: MutableList<Coin> = mutableListOf()) : RecyclerView.Adapter<CoinViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CoinViewHolder {
         val item = LayoutInflater.from(context).inflate(R.layout.item_coin, parent, false)
         return CoinViewHolder(item)
     }
 
     override fun onBindViewHolder(holder: CoinViewHolder, position: Int) {
-        coins?.get(position)?.let {
-            holder.configureItem(it)
-            holder.itemView.setOnClickListener {  }
-        }
+        holder.configureItem(coins[position])
+        holder.itemView.setOnClickListener { }
     }
 
     override fun getItemCount(): Int {
-        return coins?.size ?: 0
+        return coins.size
     }
 }
 
