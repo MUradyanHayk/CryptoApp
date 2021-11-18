@@ -12,8 +12,13 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.cryptoapp.R
 import com.example.cryptoapp.data.Coin
+import java.lang.ref.WeakReference
 
+interface CoinAdapterDelegate {
+    fun onItemClick(coin:Coin)
+}
 class CoinAdapter(val context: Context, var coins: MutableList<Coin> = mutableListOf()) : RecyclerView.Adapter<CoinViewHolder>() {
+    var delegate:WeakReference<CoinAdapterDelegate>? = null
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CoinViewHolder {
         val item = LayoutInflater.from(context).inflate(R.layout.item_coin, parent, false)
         return CoinViewHolder(item)
@@ -21,7 +26,9 @@ class CoinAdapter(val context: Context, var coins: MutableList<Coin> = mutableLi
 
     override fun onBindViewHolder(holder: CoinViewHolder, position: Int) {
         holder.configureItem(coins[position])
-        holder.itemView.setOnClickListener { }
+        holder.itemView.setOnClickListener {
+            delegate?.get()?.onItemClick(coins[position])
+        }
     }
 
     override fun getItemCount(): Int {
@@ -47,5 +54,7 @@ class CoinViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         nameTextView?.text = "${coin.name} (${coin.symbol})"
         priceTextView?.text = coin.price
         Glide.with(itemView.context).load(coin.icon).into(iconImageView!!)
+        val favImgRes = if(coin.isFavorite) R.drawable.ic_star_fill else R.drawable.ic_star_border
+            favoriteImageView?.setImageResource(favImgRes)
     }
 }

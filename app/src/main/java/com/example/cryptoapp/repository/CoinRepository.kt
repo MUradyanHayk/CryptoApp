@@ -7,16 +7,16 @@ import com.example.cryptoapp.database.CoinDatabase
 import com.example.cryptoapp.network.RetrofitInstance
 import retrofit2.Response
 
-class CoinRepository(val db: CoinDatabase) {
+class CoinRepository(private val db: CoinDatabase) {
     suspend fun getAllCoins(skip: Int, limit: Int): Response<CoinsResponse> {
         return RetrofitInstance.api.getCoins(skip, limit)
     }
 
-    fun getSavedCoins(): LiveData<Coin> {
+    fun getSavedCoins(): LiveData<MutableList<Coin>> {
         return db.getCoinDao().getSavedCoins()
     }
 
-    fun getFavoriteCoins(): LiveData<Coin> {
+    fun getFavoriteCoins(): LiveData<MutableList<Coin>> {
         return db.getCoinDao().getFavoriteCoins()
     }
 

@@ -7,10 +7,10 @@ import com.example.cryptoapp.data.Coin
 @Dao
 interface CoinDao {
     @Query("SELECT * FROM _coin_table")
-    fun getSavedCoins(): LiveData<Coin>
+    fun getSavedCoins(): LiveData<MutableList<Coin>>
 
     @Query("SELECT * FROM _coin_table WHERE _is_favorite = 1")
-    fun getFavoriteCoins(): LiveData<Coin>
+    fun getFavoriteCoins(): LiveData<MutableList<Coin>>
 
     @Insert
     fun insert(coin: Coin)

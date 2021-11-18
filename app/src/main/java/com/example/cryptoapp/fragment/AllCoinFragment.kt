@@ -13,10 +13,14 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.cryptoapp.HomeActivity
 import com.example.cryptoapp.R
 import com.example.cryptoapp.adapter.CoinAdapter
+import com.example.cryptoapp.adapter.CoinAdapterDelegate
+import com.example.cryptoapp.data.Coin
+import com.example.cryptoapp.data.CoinsResponse
 import com.example.cryptoapp.utils.Download
 import com.example.cryptoapp.viewModel.CoinViewModel
+import java.lang.ref.WeakReference
 
-class AllCoinFragment : Fragment() {
+class AllCoinFragment : Fragment(), CoinAdapterDelegate {
     private var viewModel: CoinViewModel? = null
     var screen: View? = null
     var coinAdapter: CoinAdapter? = null
@@ -34,6 +38,7 @@ class AllCoinFragment : Fragment() {
     private fun initView() {
         recyclerView = screen?.findViewById(R.id.recycler_view)
         coinAdapter = CoinAdapter(requireContext())
+        coinAdapter?.delegate = WeakReference(this)
         recyclerView?.adapter = coinAdapter
         recyclerView?.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
 
@@ -69,25 +74,39 @@ class AllCoinFragment : Fragment() {
 
     @SuppressLint("NotifyDataSetChanged")
     private fun observeCoinViewModel() {
-        viewModel?.download?.observe(viewLifecycleOwner) { coinResponse ->
-            when (coinResponse) {
-                is Download.Success -> {
-                    progressBar?.visibility = View.GONE
-                    if (coinResponse.data?.coins?.isNullOrEmpty() == false) {
-                        coinAdapter?.coins?.addAll(coinResponse.data.coins)
-                    }
-                    coinAdapter?.notifyDataSetChanged()
+        viewModel?.download?.observe(viewLifecycleOwner, this::observeDownload)
+        viewModel?.getSavedCoins()?.observe(viewLifecycleOwner, this::observeSavedCoins)
+    }
+
+    private fun observeDownload(coinResponse: Download<CoinsResponse>) {
+        when (coinResponse) {
+            is Download.Success -> {
+                progressBar?.visibility = View.GONE
+                if (coinResponse.data?.coins?.isNullOrEmpty() == false) {
+                    coinAdapter?.coins?.addAll(coinResponse.data.coins)
                 }
-                is Download.Error -> {
-                    progressBar?.visibility = View.GONE
-                    if (!coinResponse.message.isNullOrEmpty()) {
-                        Toast.makeText(requireContext(), coinResponse.message, Toast.LENGTH_SHORT).show()
-                    }
-                }
-                is Download.Loading -> {
-                    progressBar?.visibility = View.VISIBLE
+                coinAdapter?.notifyDataSetChanged()
+            }
+            is Download.Error -> {
+                progressBar?.visibility = View.GONE
+                if (!coinResponse.message.isNullOrEmpty()) {
+                    Toast.makeText(requireContext(), coinResponse.message, Toast.LENGTH_SHORT).show()
                 }
             }
+            is Download.Loading -> {
+                progressBar?.visibility = View.VISIBLE
+            }
         }
+    }
+
+    private fun observeSavedCoins(coins: MutableList<Coin>) {
+        coinAdapter?.coins?.addAll(coins)
+        coinAdapter?.notifyDataSetChanged()
+    }
+
+    override fun onItemClick(coin: Coin) {
+//        viewModel?.onItemClick(coin)
+        coin.isFavorite = !coin.isFavorite
+        coinAdapter?.notifyDataSetChanged()
     }
 }

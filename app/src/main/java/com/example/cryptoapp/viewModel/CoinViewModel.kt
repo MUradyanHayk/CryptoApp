@@ -1,9 +1,11 @@
 package com.example.cryptoapp.viewModel
 
 import android.content.Context
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.cryptoapp.data.Coin
 import com.example.cryptoapp.data.CoinsResponse
 import com.example.cryptoapp.network.NetworkManager
 import com.example.cryptoapp.repository.CoinRepository
@@ -52,5 +54,15 @@ class CoinViewModel : ViewModel() {
             }
         }
         return Download.Error(response.message())
+    }
+
+
+    fun getSavedCoins(): LiveData<MutableList<Coin>>? {
+        return repository?.getSavedCoins()
+    }
+
+    fun onItemClick(coin: Coin) {
+        coin.isFavorite = !coin.isFavorite
+        repository?.updateCoin(coin)
     }
 }
