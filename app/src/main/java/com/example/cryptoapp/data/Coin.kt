@@ -25,4 +25,7 @@ class Coin {
 
     @ColumnInfo(name = "_price")
     var price = ""
+
+    @ColumnInfo(name = "_is_favorite")
+    var isFavorite = false
 }

@@ -16,6 +16,10 @@ class CoinRepository(val db: CoinDatabase) {
         return db.getCoinDao().getSavedCoins()
     }
 
+    fun getFavoriteCoins(): LiveData<Coin> {
+        return db.getCoinDao().getFavoriteCoins()
+    }
+
     fun updateCoin(coin: Coin) {
         db.getCoinDao().update(coin)
     }
