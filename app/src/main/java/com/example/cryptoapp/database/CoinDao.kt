@@ -12,10 +12,10 @@ interface CoinDao {
     @Query("SELECT * FROM _coin_table WHERE _is_favorite = 1")
     fun getFavoriteCoins(): LiveData<MutableList<Coin>>
 
-    @Insert
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insert(coin: Coin)
 
-    @Update
+    @Update(onConflict = OnConflictStrategy.REPLACE)
     fun update(coin: Coin)
 
     @Delete
