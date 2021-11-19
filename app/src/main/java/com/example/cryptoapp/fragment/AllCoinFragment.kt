@@ -72,20 +72,20 @@ class AllCoinFragment : Fragment(), CoinAdapterDelegate {
         observeCoinViewModel()
     }
 
-    @SuppressLint("NotifyDataSetChanged")
     private fun observeCoinViewModel() {
         viewModel?.download?.observe(viewLifecycleOwner, this::observeDownload)
         viewModel?.getSavedCoins()?.observe(viewLifecycleOwner, this::observeSavedCoins)
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     private fun observeDownload(coinResponse: Download<CoinsResponse>) {
         when (coinResponse) {
             is Download.Success -> {
                 progressBar?.visibility = View.GONE
-                if (coinResponse.data?.coins?.isNullOrEmpty() == false) {
-                    coinAdapter?.coins?.addAll(coinResponse.data.coins)
-                }
-                coinAdapter?.notifyDataSetChanged()
+//                if (coinResponse.data?.coins?.isNullOrEmpty() == false) {
+//                    coinAdapter?.coins?.addAll(coinResponse.data.coins)
+//                }
+//                coinAdapter?.notifyDataSetChanged()
             }
             is Download.Error -> {
                 progressBar?.visibility = View.GONE
@@ -99,14 +99,17 @@ class AllCoinFragment : Fragment(), CoinAdapterDelegate {
         }
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     private fun observeSavedCoins(coins: MutableList<Coin>) {
-        coinAdapter?.coins?.addAll(coins)
+        coinAdapter?.coins = coins
         coinAdapter?.notifyDataSetChanged()
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     override fun onItemClick(coin: Coin) {
-//        viewModel?.onItemClick(coin)
-        coin.isFavorite = !coin.isFavorite
+        viewModel?.onItemClick(coin)
         coinAdapter?.notifyDataSetChanged()
+//        coin.isFavorite = !coin.isFavorite
+//        coinAdapter?.notifyDataSetChanged()
     }
 }

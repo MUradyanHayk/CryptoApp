@@ -20,6 +20,10 @@ class CoinRepository(private val db: CoinDatabase) {
         return db.getCoinDao().getFavoriteCoins()
     }
 
+    fun deleteAllData() {
+        db.getCoinDao().deleteAllData()
+    }
+
     fun updateCoin(coin: Coin) {
         db.getCoinDao().update(coin)
     }
@@ -28,7 +32,35 @@ class CoinRepository(private val db: CoinDatabase) {
         db.getCoinDao().insert(coin)
     }
 
+    fun insertAllCoin(coins: MutableList<Coin>) {
+        for (coin in coins) {
+            db.getCoinDao().insert(coin)
+        }
+    }
+
+    fun insertAllCoinAndUpdateIfNeeded(coins: MutableList<Coin>) {
+        for (coin in coins) {
+            insertCoin(coin)
+
+            val savedCoin = getSavedCoin(coin.id)
+            coin.isFavorite = savedCoin?.isFavorite ?: false
+            updateCoin(coin)
+        }
+    }
+
+    fun updateAllCoin(coins: MutableList<Coin>) {
+        for (coin in coins) {
+            val savedCoin = getSavedCoin(coin.id)
+            coin.isFavorite = savedCoin?.isFavorite ?: false
+            db.getCoinDao().update(coin)
+        }
+    }
+
     fun deleteCoin(coin: Coin) {
         db.getCoinDao().delete(coin)
+    }
+
+    fun getSavedCoin(id: String):Coin? {
+        return db.getCoinDao().getSavedCoin(id)
     }
 }
