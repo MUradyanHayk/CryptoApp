@@ -32,7 +32,6 @@ class CoinViewModel : ViewModel() {
             return null
         }
         return viewModelScope.launch(Dispatchers.IO) {
-//            repository?.deleteAllData()
             safeCoinCall()
         }
     }
@@ -51,10 +50,7 @@ class CoinViewModel : ViewModel() {
         if (response.isSuccessful) {
             response.body()?.let {
                 skip += limit
-//                repository?.updateAllCoin(it.coins)
-//                repository?.insertAllCoin(it.coins)
                 repository?.insertAllCoinAndUpdateIfNeeded(it.coins)
-
                 return Download.Success(it)
             }
         }
