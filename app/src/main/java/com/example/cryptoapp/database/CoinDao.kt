@@ -21,7 +21,7 @@ interface CoinDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insert(coin: Coin)
 
-    @Update(onConflict = OnConflictStrategy.REPLACE)
+    @Update(onConflict = OnConflictStrategy.ABORT)
     fun update(coin: Coin)
 
     @Delete
