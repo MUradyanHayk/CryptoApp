@@ -57,9 +57,12 @@ class CoinViewModel : ViewModel() {
         return Download.Error(response.message())
     }
 
-
     fun getSavedCoins(): LiveData<MutableList<Coin>>? {
         return repository?.getSavedCoins()
+    }
+
+    fun getSavedFavoriteCoins(): LiveData<MutableList<Coin>>? {
+        return repository?.getFavoriteCoins()
     }
 
     fun onItemClick(coin: Coin) {
